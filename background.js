@@ -1,30 +1,15 @@
-let contextMenuItem = {
-    "id": "open-wp-dashboard",
-    "title": "Open WordPress Dashboard",
-    "contexts": ["page"]
-};
-chrome.contextMenus.create(contextMenuItem);
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.contextMenus.create({
+        "id": "openWPDashboard",
+        "title": "Open WP Dashboard",
+        "contexts": ["page"]
+    });
+});
 
-let currUrl = window.location.href;
-console.log(currUrl);
-console.log(window.location)
-
-// chrome.contextMenus.onClicked.addListener(function(clickData) {
-//     console.log(clickData);
-//     console.log(OnClickData.menuItemId);
-//     alert(OnClickData.menuItemId);
-// })
-function contextItemClicked() {
-    console.log('clicked')
-}
-chrome.contextMenus.onClicked.addListener({
-    callback: contextItemClicked()
-})
-
-// chrome.contextMenus.create({title: 'My menu', id: 'my_menu'});
-//
-// chrome.contextMenus.onClicked.addListener(function (info, tab) {
-//     if (info.menuItemId = 'my_menu') {
-//         console.log(info);
-//     }
-// })
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+    if (info.menuItemId == "openWPDashboard") {
+        var newURL = new URL(tab.url);
+        newURL.pathname = "/wp-admin/";
+        chrome.tabs.create({ url: newURL.href });
+    }
+});
